@@ -1,0 +1,55 @@
+
+server:
+  port: 8081
+
+spring:
+  application:
+    name: kafka-sms-producer
+
+  datasource:
+    url: jdbc:sqlserver://localhost:1433;databaseName=SMS_DB;encrypt=true;trustServerCertificate=true
+    username: sa
+    password: YourStrong@Passw0rd
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
+
+    hikari:
+      maximum-pool-size: 10
+      minimum-idle: 2
+      connection-timeout: 30000
+
+  jpa:
+    hibernate:
+      ddl-auto: none
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  kafka:
+    bootstrap-servers: localhost:9092
+
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      acks: all
+      retries: 10
+      properties:
+        enable.idempotence: true
+
+app:
+  kafka:
+    topic: SMS.AFRICASTALKING.REQUEST
+
+  sms:
+    tenant-id: 126
+    client-id: 126
+    provider-id: 1
+    sender-id: AFRICASTKNG
+
+    api-key: "YOUR_AFRICASTALKING_API_KEY"
+    api-secret: "YOUR_AFRICASTALKING_API_SECRET"
+
+    test-recipient: "254728021025"
+
+    pending-status: 0
+    channel: SMS
